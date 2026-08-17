@@ -1,21 +1,153 @@
-# allreport-partner-blog
+# allreport-partner-blog — 올레포트 파트너 블로그 수익화 프로젝트
 
-올레포트(allreport.co.kr) 파트너 블로그 수익화 프로젝트의 작업 저장소입니다.
+> **이 README 하나만 읽으면 다음 작업을 이어서 진행할 수 있도록 작성된 인수인계 문서입니다.**
+> 새 세션의 Claude에게 이 저장소 주소를 주고 "README.md 읽고 이어서 진행해줘"라고 요청하면 됩니다.
+>
+> 최종 업데이트: 2026-08-17 (Asia/Seoul) · 작업자: Claude (Cowork) + 운영자
 
-**이어서 작업하려면 → [PROGRESS.md](./PROGRESS.md) 를 읽으세요.** 프로젝트 맥락, 완료된 작업, 게시 자동화 방법, 다음 할 일이 모두 정리되어 있습니다.
+---
 
-## 구조
+## 1. 프로젝트 개요 — 무엇으로 돈을 버는가
+
+- **수익 모델**: 올레포트(allreport.co.kr, 대학 레포트·자소서·실습일지 판매 플랫폼)의 파트너 프로그램. 운영 중인 블로그에 자료 소개 글을 올리고, 글 안의 파트너 링크로 방문자가 자료를 구매하면 커미션(홍보 수익 최대 80% 등업 구조)을 받는다.
+- **파트너 링크 형식** (모든 글에서 이 형식만 사용):
+  ```
+  https://www.allreport.co.kr/search/detail.asp?sid=leesk55&pk={자료번호}
+  ```
+- **파트너 ID**: `leesk55` — 두 블로그의 기존 글 전체가 이 ID를 사용 중. (공개 게시글에 이미 노출된 값이라 여기 기록함. **비밀번호·API 토큰은 절대 이 저장소에 커밋하지 말 것**)
+- **핵심 전략**: 감이 아니라 **파트너 대시보드의 "수익순 랭킹" 실데이터**로 자료를 고르고, 시즌(개강·공채·시험) 수요에 맞춰 묶음 큐레이션 글을 작성한다. 고단가 자료(9,000~26,000원대 보육·시험자료)를 글 상단에 배치한다.
+
+## 2. 운영 자산
+
+| 자산 | 플랫폼 | 역할 | 게시 방법 |
+|---|---|---|---|
+| **카카오레포트** kakao.ivyro.net | 그누보드 (EUC-KR, SmartEditor2) | 메인 게시판형 블로그. 일 방문 ~1,200 | §5-A 참조 (관리자 "최고관리자" 로그인 필요) |
+| **애플 레포트** hadesyi.cafe24.com | 워드프레스 (블록에디터) | 보조 블로그 | §5-B 참조 (계정 hadesyi 로그인 필요) |
+| **네이버 블로그** (m.)blog.naver.com | — | **실제 유입의 주력** (주간 식별 유입 대부분) | 미착수 — 다음 우선 과제 |
+| 올레포트 파트너 대시보드 | — | 자료 선정·성과 확인 | leesk55로 로그인 |
+
+**카카오레포트 게시판 매핑** (글쓰기 URL: `/bbs/write.php?bo_table={코드}`):
+
+| bo_table 코드 | 게시판 이름 | 주제 |
+|---|---|---|
+| `free` | 레포트 | 레포트·간호·자격증 기출 등 |
+| `gallery` | 자기소개서 | 기업·직무별 합격 자소서 |
+| `notice` | 실험과제 | 보육(관찰일지·발달평가)·실험 |
+| `qa` | 방송통신 | 방통대 과제물 |
+
+**올레포트 파트너 대시보드 주요 URL** (www.allreport.co.kr, 로그인 필요):
+
+| URL | 용도 |
+|---|---|
+| `/partner/` | 대시보드 홈 |
+| `/partner/recom/inki.asp?mode=month&cat={카테고리명}&ord=income` | ⭐ 카테고리별 **수익순 랭킹** (자료 선정의 근거). cat은 한글 카테고리명(레포트/실습일지/자기소개/시험자료/족보노트/방송통신 등), ord: down=인기순, income=수익순, price=가격순. 페이지 내 폼으로 조작하는 게 안전(EUC-KR 인코딩) |
+| `/partner/stats/down.asp` | 내 판매 현황 (성과 측정) |
+| `/partner/stats/refer.asp` | 유입경로 분석 |
+| `/partner/recom/auto.asp` | 홍보코드 자동 생성기 |
+
+## 3. 완료된 작업 (2026-08-16 ~ 08-17)
+
+### 조사·진단
+- 파트너 대시보드에서 최근 30일 카테고리별 수익순 랭킹 수집 → **`data/올레포트_수익랭킹_2026-08.md`** (자료명·pk·가격, 검증 여부 표시)
+- 자료 12건은 상세페이지에서 제목·가격·구성까지 검증 완료
+- **기준선(2026-08-16)**: 주간 유입 895회 (Null 80%, 네이버 블로그 계열 ~19%) 대비 **최근 1개월 판매 2건** → 전환율이 핵심 문제. 개선책: 시즌 묶음 큐레이션 + 고단가 우선 배치 + "목차·미리보기 확인" CTA + 제휴 공시로 신뢰 확보
+
+### 게시 완료 6건 (원본 HTML은 `posts/` 폴더)
+
+| # | 사이트/게시판 | 글 제목 (타깃 키워드) | URL |
+|---|---|---|---|
+| K1 | 카카오/gallery | 2026 하반기 채용 자소서 합격 자료 6선 | kakao.ivyro.net/bbs/board.php?bo_table=gallery&wr_id=798 |
+| K2 | 카카오/notice | 어린이집 2학기·평가제 관찰일지 발달평가 모음 | kakao.ivyro.net/bbs/board.php?bo_table=notice&wr_id=1064 |
+| K3 | 카카오/free | 간호학과 2학기 실습 vSim·CPR·케이스 모음 | kakao.ivyro.net/bbs/board.php?bo_table=free&wr_id=4378 |
+| H1 | hadesyi | 가을 자격증 기출·요약 (소방·산업안전·전기) | hadesyi.cafe24.com/14232/ |
+| H2 | hadesyi | 사회복지 현장실습 서류 모음 | hadesyi.cafe24.com/14233/ |
+| H3 | hadesyi | 독학사 3단계 가정학 족보 모음 | hadesyi.cafe24.com/14234/ |
+
+## 4. 새 글 만들기 레시피 (이 순서대로)
+
+1. **자료 선정**: 파트너 대시보드 수익순 랭킹(§2 표의 inki.asp)에서 시즌에 맞는 카테고리 Top10 확인. `data/` 폴더의 지난 랭킹과 비교해 새 자료 위주로 선정
+2. **검증**: 각 자료의 `detail.asp?pk=번호` 페이지에서 제목·가격·페이지수·구성 확인 (검증 안 된 가격·구성은 글에 쓰지 않는다)
+3. **글 작성**: `posts/`의 기존 글 구조를 그대로 따른다 —
+   도입(시즌 공감 2~3문장) → 자료 4~6개(소제목=자료명 / 메타줄: 형식·페이지·가격 / 설명 2~3문장 / CTA 버튼 "자료 목차·미리보기 확인 →") → 활용 팁 박스(표절 주의 포함) → **제휴 공시 문구(필수)** → 키워드 나열
+4. **링크**: 모든 자료 링크는 `https://www.allreport.co.kr/search/detail.asp?sid=leesk55&pk={pk}` + `target="_blank"`
+5. **제목**: 구매 직전 검색어를 그대로 (예: "만1세 관찰일지", "소방안전관리자 2급 기출문제") + 시즌·혜택 문구
+6. **게시**: §5의 방법으로. 같은 글을 두 사이트에 복붙하지 말 것(검색 중복 페널티) — 주제가 겹치면 문장을 다르게 재작성
+
+## 5. 게시 방법 (기술 매뉴얼 — 실제 검증된 절차)
+
+### A. 카카오레포트 (그누보드) — 브라우저 자동화(Claude in Chrome) 기준
+
+1. 사용자가 크롬에서 kakao.ivyro.net에 **직접 로그인** (Claude 작업 탭과 같은 크롬 프로필이어야 함. 자동로그인 체크 권장)
+2. `/bbs/write.php?bo_table={코드}` 접속
+3. JS로 입력: `#wr_subject`에 제목, 본문은 SmartEditor2 API 사용:
+   ```js
+   const ed = oEditors.getById['wr_content'];
+   ed.exec('PASTE_HTML', [html]);          // 본문 HTML 주입
+   ed.exec('UPDATE_CONTENTS_FIELD', []);   // textarea 동기화
+   ```
+4. ⚠️ **제출은 반드시 실제 버튼 클릭**: `document.getElementById('btn_submit').click()`
+   - `form.submit()`·`requestSubmit()`은 토큰 검증 실패 → "올바른 방법으로 이용해 주십시오" 오류 (버튼 클릭에 토큰 발급 로직이 바인딩되어 있음)
+5. ⚠️ **오류 alert가 자동화를 멈춤** → 제출 전에 폼 target을 샌드박스 iframe으로 돌려 두면 팝업 없이 결과를 읽을 수 있다:
+   ```js
+   const fr = document.createElement('iframe');
+   fr.name='claude_subframe'; fr.setAttribute('sandbox','allow-same-origin allow-forms');
+   document.body.appendChild(fr);
+   document.fwrite.target='claude_subframe';   // 그 다음 btn_submit.click()
+   // 성공 판정: fr.contentWindow.location.pathname === '/bbs/board.php'
+   ```
+6. 수동 게시 시: 글쓰기 → 에디터 HTML 모드 → `posts/` 파일 본문 붙여넣기 (파일 상단 주석에 제목 있음)
+
+### B. 애플 레포트 (워드프레스) — REST API가 가장 깔끔
+
+1. 사용자가 크롬에서 hadesyi.cafe24.com/wp-admin 로그인
+2. `/wp-admin/post-new.php` 접속 후 JS 실행:
+   ```js
+   const r = await fetch(wpApiSettings.root + 'wp/v2/posts', {
+     method:'POST', credentials:'same-origin',
+     headers:{'Content-Type':'application/json','X-WP-Nonce': wpApiSettings.nonce},
+     body: JSON.stringify({title:'제목', content: html, status:'publish'})
+   });   // 201 응답의 .link가 글 주소
+   ```
+3. 수동 게시 시: 새 글 → 코드 편집기(HTML 블록) → 붙여넣기
+
+### C. 공통 함정 (시간 아끼는 메모)
+
+- allreport의 `/partner/*`, `/search/search.asp`는 robots 차단 → WebFetch 불가, **브라우저로만 접근**. `/search/detail.asp`는 WebFetch 가능
+- allreport·카카오레포트는 **EUC-KR** — URL에 한글 파라미터 직접 넣지 말고 페이지 내 폼/JS로 조작
+- hadesyi.cafe24.com은 WebFetch로 빈 페이지로 보임(정상임) → 브라우저로 확인
+- 로그인이 필요한 작업 전, 작업 탭에서 로그인 상태부터 확인할 것 (로그아웃 상태로 글쓰기 진입 시 alert가 떠서 멈춤)
+- Claude in Chrome의 사이트 권한은 세션 중 만료될 수 있음 → 다시 권한 승인하면 됨
+
+## 6. 다음 할 일 (우선순위순)
+
+1. **네이버 블로그 변형본** ⭐ 최우선 — 게시된 6개 글 주제를 네이버용으로 문장 전체 재작성(유사문서 방지, 복붙 금지). 네이버는 외부 상업 링크에 민감 → 글당 링크 1~2개로 절제
+2. **방통대 2학기 글** — 9월 말~10월 초 게시(중간과제물 공개 직후 피크). 카카오 `qa` 게시판. 후보 pk: 철학의이해 28311068(검증됨, 3,000원), 사회복지시설과사회적경제 50036166, 심리학에게묻다 23091084, 대학영어 24432235. 게시 전 그 시점의 최신 자료로 랭킹 재확인
+3. **월간 랭킹 갱신** — 매월 초 inki.asp(수익순) 재수집 → `data/올레포트_수익랭킹_YYYY-MM.md`로 추가 커밋 → 기존 글의 저성과 자료 교체
+4. **성과 측정** — `/partner/stats/down.asp`에서 판매 추이 확인. 기준선: 2026-08-16 월 2건. 게시 글별 효과는 유입경로(refer.asp)와 함께 해석
+5. **시즌 캘린더**: 9월 개강·하반기 공채(자소서·상식) / 10월 어린이집 2학기 발달평가(K2 갱신·끌올), 방통대 과제 / 11월 기사 실기 3회차(H1 갱신) / 1월 사회복지사 1급 시험 / 2~3월 신학기 적응일지·보육실습
+6. hadesyi 카테고리 정리(현재 전부 미분류) + 기존 글 간 내부링크로 SEO 개선
+
+## 7. 다음 세션 시작 절차 (그대로 따라하기)
+
+1. Cowork에서 새 작업 시작 → 이 저장소 주소를 주며:
+   > "https://github.com/EricSeokgon/allreport-partner-blog 의 README.md 읽고 이어서 진행해줘. 이번에 할 일은 ○○"
+2. 게시·대시보드 작업이 포함되면 **크롬(Claude in Chrome 연결된 창)에서 미리 로그인**: 카카오레포트(관리자) / hadesyi wp-admin / allreport(leesk55) / (네이버 작업 시) 네이버
+3. Claude가 처음 할 일: 이 README + `data/` 최신 랭킹 확인 → §6 우선순위대로 제안 → 진행
+4. 작업이 끝나면: 이 README의 §3(완료 목록)·§6(다음 할 일)과 `data/`를 갱신해 커밋하는 것까지가 한 사이클
+
+## 8. 저장소 구조
 
 ```
-PROGRESS.md                  ← 상태 문서 (여기부터 읽기)
-게시_가이드_및_수익전략.md      ← 콘텐츠 전략·게시 방법·데이터 근거
-posts/                       ← 게시 완료된 블로그 글 원본 HTML 6건
-data/                        ← 올레포트 수익순 랭킹 등 리서치 데이터
+README.md                     ← 이 문서 (인수인계 · 여기만 읽으면 됨)
+PROGRESS.md                   ← 초기 상태 문서 (이력 보관용, 내용은 README에 통합됨)
+게시_가이드_및_수익전략.md       ← 최초 콘텐츠 전략·데이터 근거 (참고)
+posts/                        ← 게시 완료된 글 6건의 원본 HTML (새 글의 템플릿)
+data/올레포트_수익랭킹_2026-08.md ← 카테고리별 수익순 랭킹 + 판매 기준선
 ```
 
-## 운영 사이트
+## 9. 규칙
 
-- 카카오레포트: https://kakao.ivyro.net/ (그누보드)
-- 애플 레포트: https://hadesyi.cafe24.com/ (워드프레스)
-
-⚠️ 이 저장소에는 비밀번호·API 토큰을 절대 커밋하지 마세요. (파트너 ID `leesk55`는 공개 게시글에 노출된 값이라 기록되어 있습니다.)
+- 비밀번호·API 토큰·개인정보는 저장소와 채팅 어디에도 기록하지 않는다 (로그인은 항상 사용자가 브라우저에서 직접)
+- 글에는 제휴 공시 문구를 반드시 포함한다 (표시광고법 + 신뢰)
+- 자료 소개는 "참고용" 관점을 유지하고 표절·대리제출을 조장하는 표현은 쓰지 않는다
+- 검증하지 않은 가격·구성 정보는 글에 쓰지 않는다
